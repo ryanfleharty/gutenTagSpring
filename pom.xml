@@ -32,6 +32,10 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
         <!-- These two dependencies fix java version errors for newer Java -->
         <dependency>
             <groupId>javax.xml.bind</groupId>

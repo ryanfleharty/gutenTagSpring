@@ -1,7 +1,11 @@
+visageBook/CorsConfig.class
 visageBook/PostRepository.class
 visageBook/UserRepository.class
+visageBook/UserService.class
+visageBook/SecurityConfiguration.class
 visageBook/Application.class
 visageBook/FirstController.class
 visageBook/UserController.class
+visageBook/WebMvcConfig.class
 visageBook/User.class
 visageBook/Post.class

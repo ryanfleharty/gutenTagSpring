@@ -1,8 +1,11 @@
 package visageBook;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -13,6 +16,12 @@ public class UserController {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/users")
     public Iterable<User> usersIndex(){
@@ -35,7 +44,22 @@ public class UserController {
 
     @PostMapping("/users")
     public User createUser(@RequestBody User user){
-        return userRepository.save(user);
+        return userService.saveUser(user);
+    }
+
+    @PostMapping("/login")
+    public User login(@RequestBody User login, HttpSession session) throws Exception {
+        User user = userRepository.findByUsername(login.getUsername());
+        if(user ==  null){
+            throw new Exception("Invalid Credentials");
+        }
+        boolean valid = bCryptPasswordEncoder.matches(login.getPassword(), user.getPassword());
+        if(valid){
+            session.setAttribute("username", user.getUsername());
+            return user;
+        }else{
+            throw new Exception("Invalid Credentials");
+        }
     }
 
     @DeleteMapping("/users/{id}")

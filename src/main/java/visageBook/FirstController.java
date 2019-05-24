@@ -3,6 +3,7 @@ package visageBook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @RestController
@@ -10,6 +11,9 @@ public class FirstController {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     // Get All
     @GetMapping("/posts")
@@ -19,7 +23,15 @@ public class FirstController {
 
     // Add Item Route POST
     @PostMapping("/posts")
-    public Post newString(@RequestBody Post post){
+    public Post newString(@RequestBody Post post, HttpSession session) throws Exception{
+        if(session.getAttribute("username") == null){
+            throw new Exception("you must be logged in");
+        }
+        User user = userRepository.findByUsername(session.getAttribute("username").toString());
+        if(user == null){
+            throw new Exception("you must be logged in");
+        }
+        post.setUser(user);
         Post newPost = postRepository.save(post);
         return newPost;
     }
